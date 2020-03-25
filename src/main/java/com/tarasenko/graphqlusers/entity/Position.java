@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -23,12 +24,12 @@ public class Position
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "id")
-  private long id;
+  private Long id;
 
   @Column(name = "name")
   private String name;
 
-  @OneToOne(targetEntity = Company.class)
+  @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "company_id")
   private Company company;
 

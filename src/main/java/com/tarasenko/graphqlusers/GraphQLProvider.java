@@ -8,17 +8,26 @@ import javax.annotation.PostConstruct;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
+import com.tarasenko.graphqlusers.fetchers.GraphQLDataFetchers;
+
 import graphql.GraphQL;
 import graphql.schema.GraphQLSchema;
 import graphql.schema.idl.RuntimeWiring;
 import graphql.schema.idl.SchemaGenerator;
 import graphql.schema.idl.SchemaParser;
 import graphql.schema.idl.TypeDefinitionRegistry;
+import graphql.schema.idl.TypeRuntimeWiring;
 
 @Component
 public class GraphQLProvider
 {
   private GraphQL graphQL;
+  private final GraphQLDataFetchers graphQLDataFetchers;
+
+  public GraphQLProvider(GraphQLDataFetchers graphQLDataFetchers)
+  {
+    this.graphQLDataFetchers = graphQLDataFetchers;
+  }
 
   @Bean
   public GraphQL graphQL()
@@ -52,7 +61,12 @@ public class GraphQLProvider
 
   private RuntimeWiring buildWiring()
   {
-    return RuntimeWiring.newRuntimeWiring().build();
+    return RuntimeWiring.newRuntimeWiring()
+        .type(TypeRuntimeWiring.newTypeWiring("Query")
+            .dataFetcher("userById", graphQLDataFetchers.getUserById())
+            .dataFetcher("companyById", graphQLDataFetchers.getCompanyById())
+            .dataFetcher("positionById", graphQLDataFetchers.getPositionById()))
+        .build();
   }
 
 }

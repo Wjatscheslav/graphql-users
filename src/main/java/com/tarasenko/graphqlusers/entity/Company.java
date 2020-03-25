@@ -9,7 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -25,7 +24,7 @@ public class Company
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "id")
-  private long id;
+  private Long id;
 
   @Column(name = "name")
   private String name;
@@ -36,7 +35,7 @@ public class Company
   @OneToMany(mappedBy = "company", targetEntity = User.class, cascade = CascadeType.ALL, orphanRemoval = true)
   private List<User> users;
 
-  @OneToOne(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
-  private Position position;
+  @OneToMany(mappedBy = "company", targetEntity = Position.class, cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Position> positions;
 
 }

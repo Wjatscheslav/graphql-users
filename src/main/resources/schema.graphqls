@@ -1,5 +1,7 @@
 type Query {
     userById(id: ID): User
+    companyById(id: ID): Company
+    positionById(id: ID): Position
 }
 
 type User {
